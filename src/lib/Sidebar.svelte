@@ -7,7 +7,7 @@
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     $: activeUrl = $page.url.pathname;
 
-    const pbConnect = new PocketBase("http://127.0.0.1:8090");
+    const pbConnect = new PocketBase("https://dansksuperrally-cms.pockethost.io");
 
     function logUd() {
         pb.authStore.clear();

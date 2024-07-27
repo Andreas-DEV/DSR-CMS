@@ -4,7 +4,7 @@
     import { Button, Modal, Label, Input, Checkbox } from "flowbite-svelte";
     let formModal = false;
 
-    const pbConnect = new PocketBase("http://127.0.0.1:8090");
+    const pbConnect = new PocketBase("https://dansksuperrally-cms.pockethost.io");
 
 
     const data = {

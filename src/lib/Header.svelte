@@ -4,7 +4,7 @@
     import PocketBase from "pocketbase";
     import logo from "$lib/assets/Logo.png";
 
-    const pb = new PocketBase("http://127.0.0.1:8090");
+    const pb = new PocketBase("https://dansksuperrally-cms.pockethost.io");
 
     function logUd() {
         pb.authStore.clear();

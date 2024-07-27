@@ -2,7 +2,7 @@
     import Sidebar from "./Sidebar.svelte";
     import { pb, currentUser } from "../lib/pocketbase";
 
-    const pbConnect = new PocketBase("http://127.0.0.1:8090");
+    const pbConnect = new PocketBase("https://dansksuperrally-cms.pockethost.io");
 
     function logUd() {
         pb.authStore.clear();
