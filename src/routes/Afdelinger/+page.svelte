@@ -33,25 +33,39 @@
             klasse: klasseInput,
             total: totalInput,
         };
-        const record = await pb.collection(currentStilling).create(data);
-        nummerInput = "";
-        forsteInput = "";
-        andenInput = "";
-        bilInput = "";
-        klasseInput = "";
-        totalInput = "";
+        try {
+            
+            const record = await pb.collection(currentStilling).create(data);
+            nummerInput = "";
+            forsteInput = "";
+            andenInput = "";
+            bilInput = "";
+            klasseInput = "";
+            totalInput = "";
+        } catch (error) {
+            console.log('Error: ' + error);
+            
+        }
+        window.location.reload();
     }
 
     let records: any[] = [];
 
     async function fetchData() {
-        const fetchedRecords = await pb
-            .collection(currentStilling)
-            .getFullList({
-                sort: "created,nummer",
-            });
-
-        records = fetchedRecords;
+        try {
+            const fetchedRecords = await pb
+                .collection(currentStilling)
+                .getFullList({
+                    sort: "created,nummer",
+                });
+    
+            records = fetchedRecords;
+            
+        } catch (error) {
+            console.log('Error: ' + error);
+            
+        }
+        
     }
 
     let idInput = "";
@@ -66,13 +80,27 @@
             total: totalInput,
         };
 
-        const record = await pb
-            .collection(currentStilling)
-            .update(idInput, data);
+        try {
+            const record = await pb
+                .collection(currentStilling)
+                .update(idInput, data);
+                window.location.reload();
+        } catch (error) {
+            console.log('Error: '+ error);
+            
+        }
+        
     }
 
     async function deleteData() {
-        await pb.collection(currentStilling).delete(idInput);
+        try {
+            
+            await pb.collection(currentStilling).delete(idInput);
+        } catch (error) {
+            console.log('Error: ' + error);
+            
+        }
+        window.location.reload();
     }
 
     $: currentStilling, fetchData();
@@ -352,7 +380,7 @@
 <section class="flex items-center gap-14 justify-center my-auto">
     <form
         on:submit={() => {
-            window.location.reload();
+           
         }}
         class="flex flex-col gap-2 my-5"
     >

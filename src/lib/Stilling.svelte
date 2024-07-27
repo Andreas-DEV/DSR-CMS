@@ -25,7 +25,8 @@
     let currentStilling = "dsr1";
 
     async function createData() {
-        const data = {
+        try {
+            const data = {
             generalt: generaltInput,
             klasse: klasseInput,
             ps: psInput,
@@ -34,12 +35,20 @@
         generaltInput = "";
         klasseInput = "";
         psInput = "";
+        } catch (error) {
+            console.log('Error' + error);
+            
+        }
+
+        window.location.reload();
+       
     }
 
     let records: any[] = [];
 
     async function fetchData() {
-        const fetchedRecords = await pb
+        try {
+            const fetchedRecords = await pb
             .collection(currentStilling)
             .getFullList({
                 sort: "-created",
@@ -47,13 +56,17 @@
 
         records = fetchedRecords;
 
-        console.log(records);
+        } catch (error) {
+            console.log('Error' + error);
+        }
+       
     }
 
     let idInput = "";
 
     async function updateData() {
-        const data = {
+        try {
+            const data = {
             generalt: generaltInput,
             klasse: klasseInput,
             ps: psInput,
@@ -61,11 +74,20 @@
 
         const record = await pb
             .collection(currentStilling)
-            .update(idInput, data);
+            .update(idInput, data); 
+        } catch (error) {
+            console.log('Error' + error);
+        }
+        window.location.reload();
     }
 
     async function deleteData() {
-        await pb.collection(currentStilling).delete(idInput);
+        try {
+            await pb.collection(currentStilling).delete(idInput);
+        } catch (error) {
+            console.log('Error' + error);
+        }
+        window.location.reload();
     }
 
     $: currentStilling, fetchData();
@@ -1075,7 +1097,7 @@
 <section class="flex items-center gap-14 justify-center mt-72">
     <form
         on:submit={() => {
-            window.location.reload();
+            
         }}
         class="flex flex-col gap-2 my-5"
     >

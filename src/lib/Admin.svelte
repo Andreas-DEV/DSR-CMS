@@ -19,7 +19,13 @@
         text4: "test",
     };
     async function createNyhed() {
-        const record = await pb.collection("nyheder").create(data);
+        try {
+            
+            const record = await pb.collection("nyheder").create(data);
+        } catch (error) {
+            console.log('Error: ' + error);
+            
+        }
     }
 
 
