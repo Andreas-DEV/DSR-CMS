@@ -6,7 +6,7 @@
 
     import PocketBase from "pocketbase";
 
-    const pb = new PocketBase("http://127.0.0.1:8090");
+    const pb = new PocketBase("https://dansksuperrally-cms.pockethost.io");
 
     function logUd() {
         pb.authStore.clear();
@@ -21,6 +21,8 @@
     let totalInput: string = "";
 
     let currentStilling = "stilling";
+
+    let textFelt: string
 
     async function createData() {
         const data = {
@@ -46,7 +48,7 @@
         const fetchedRecords = await pb
             .collection(currentStilling)
             .getFullList({
-                sort: "created,nummer"
+                sort: "created,nummer",
             });
 
         records = fetchedRecords;
@@ -78,25 +80,26 @@
 
 <Header />
 
-<!-- TEST -->
 <!-- <div>
-    <div>
-        <ul>
-        {#each records as record, index}
-
-        <li>{record.collectionName}</li>
-        {/each}
-    </ul>
-    </div>
+    <ul>
+{#each records as record, index}
+<li>{record.id}</li>
+{/each}
+</ul>
 </div> -->
+
+<!-- TEST -->
 
 <div
     class="flex justify-center flex-1 mx-auto my-10 border border-[#5b6068] w-max rounded"
 >
-    <div class="flex items-stretch">
-        <button class="btn btn-ghost rounded-none" on:click={() => {
-            currentStilling = "stilling"
-        }}>Stilling</button>
+    <div class="flex">
+        <button
+            class="btn btn-ghost rounded-none"
+            on:click={() => {
+                currentStilling = "stilling";
+            }}>Stilling</button
+        >
         <div class="dropdown dropdown-end">
             <div tabindex="0" role="button" class="btn btn-ghost rounded-none">
                 National
@@ -346,7 +349,7 @@
     </div>
 </div>
 
-<section class="flex items-center gap-14 justify-center">
+<section class="flex items-center gap-14 justify-center my-auto">
     <form
         on:submit={() => {
             window.location.reload();
@@ -434,7 +437,6 @@
                 <button class="btn text-white w-full" on:click={updateData}
                     >Ret</button
                 >
-                
             </div>
             <button class="btn text-white" on:click={deleteData}>Slet</button>
         </div>
@@ -443,7 +445,8 @@
     <form class="mb-12">
         <div class="records">
             <h3
-                class="text-center text-3xl uppercase text-white select-none mb-8">
+                class="text-center text-3xl uppercase text-white select-none mb-8"
+            >
                 {currentStilling}
             </h3>
             {#if records.length > 0}
