@@ -20,7 +20,7 @@
 {:else}
     <div class="mainContainer">
         <h1>DSR CMS Login</h1>
-        <form on:submit|preventDefault>
+        <form>
             <input type="text" placeholder="Username" bind:value={username} />
             <input
                 type="password"

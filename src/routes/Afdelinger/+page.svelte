@@ -4,6 +4,9 @@
 
     import { onMount } from "svelte";
 
+    import arrowLeft from "$lib/assets/ArrowLeft.svg"
+    import arrowRight from "$lib/assets/ArrowRight.svg"
+
     import PocketBase from "pocketbase";
 
     const pb = new PocketBase("https://dansksuperrally-cms.pockethost.io");
@@ -18,7 +21,54 @@
     let andenInput: string;
     let bilInput: string;
     let klasseInput: string;
-    let totalInput: string;
+
+    let totalInput: Number;
+
+    $: {
+        const totalGe = isNaN(parseInt(geInput)) ? 0 : parseInt(geInput);
+        const totalKl = isNaN(parseInt(klInput)) ? 0 : parseInt(klInput);
+        const totalPs = isNaN(parseInt(psInput)) ? 0 : parseInt(psInput);
+
+        const totalGe2 = isNaN(parseInt(ge2Input)) ? 0 : parseInt(ge2Input);
+        const totalKl2 = isNaN(parseInt(kl2Input)) ? 0 : parseInt(kl2Input);
+        const totalPs2 = isNaN(parseInt(ps2Input)) ? 0 : parseInt(ps2Input);
+
+        const totalGe3 = isNaN(parseInt(ge3Input)) ? 0 : parseInt(ge3Input);
+        const totalKl3 = isNaN(parseInt(kl3Input)) ? 0 : parseInt(kl3Input);
+        const totalPs3 = isNaN(parseInt(ps3Input)) ? 0 : parseInt(ps3Input);
+
+        const totalGe4 = isNaN(parseInt(ge4Input)) ? 0 : parseInt(ge4Input);
+        const totalKl4 = isNaN(parseInt(kl4Input)) ? 0 : parseInt(kl4Input);
+        const totalPs4 = isNaN(parseInt(ps4Input)) ? 0 : parseInt(ps4Input);
+
+        const totalGe5 = isNaN(parseInt(ge5Input)) ? 0 : parseInt(ge5Input);
+        const totalKl5 = isNaN(parseInt(kl5Input)) ? 0 : parseInt(kl5Input);
+        const totalPs5 = isNaN(parseInt(ps5Input)) ? 0 : parseInt(ps5Input);
+
+        const totalGe6 = isNaN(parseInt(ge6Input)) ? 0 : parseInt(ge6Input);
+        const totalKl6 = isNaN(parseInt(kl6Input)) ? 0 : parseInt(kl6Input);
+        const totalPs6 = isNaN(parseInt(ps6Input)) ? 0 : parseInt(ps6Input);
+
+        totalInput =
+            totalGe +
+            totalKl +
+            totalPs +
+            totalGe2 +
+            totalKl2 +
+            totalPs2 +
+            totalGe3 +
+            totalKl3 +
+            totalPs3 +
+            totalGe4 +
+            totalKl4 +
+            totalPs4 +
+            totalGe5 +
+            totalKl5 +
+            totalPs5 +
+            totalGe6 +
+            totalKl6 +
+            totalPs6;
+    }
 
     let geInput: string;
     let klInput: string;
@@ -46,8 +96,6 @@
 
     let currentStilling = "stilling";
 
-    let textFelt: string;
-
     async function createData() {
         const data = {
             nummer: nummerInput,
@@ -69,7 +117,7 @@
             kl4: kl4Input,
             kl5: kl5Input,
             kl6: kl6Input,
-            
+
             ps: psInput,
             ps2: ps2Input,
             ps3: ps3Input,
@@ -111,7 +159,7 @@
             kl6Input = "";
             ps6Input = "";
 
-            totalInput = "";
+            totalInput = 0;
         } catch (error) {
             console.log("Error: " + error);
         }
@@ -134,7 +182,6 @@
         }
 
         console.log(records);
-        
     }
 
     let idInput = "";
@@ -160,7 +207,7 @@
             kl4: kl4Input,
             kl5: kl5Input,
             kl6: kl6Input,
-            
+
             ps: psInput,
             ps2: ps2Input,
             ps3: ps3Input,
@@ -169,13 +216,13 @@
             ps6: ps6Input,
 
             total: totalInput,
-
         };
 
         try {
             const record = await pb
                 .collection(currentStilling)
                 .update(idInput, data);
+
             window.location.reload();
         } catch (error) {
             console.log("Error: " + error);
@@ -192,268 +239,24 @@
     }
 
     $: currentStilling, fetchData();
+
+    let testScore: string;
+
+    let currentPage = 1;
+    let itemsPerPage = 12;
+
+    $: paginatedRecords = records.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage,
+    );
+
+    function changeItemsPerPage(newItemsPerPage:any) {
+        itemsPerPage = newItemsPerPage;
+        currentPage = 1;
+    }
 </script>
 
 <Header />
-
-<div
-    class="flex justify-center flex-1 mx-auto my-10 border border-[#5b6068] w-max rounded"
->
-    <div class="flex">
-        <button
-            class="btn btn-ghost rounded-none"
-            on:click={() => {
-                currentStilling = "stilling";
-            }}>Stilling</button
-        >
-        <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost rounded-none">
-                National
-            </div>
-            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <ul
-                tabindex="0"
-                class="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4 text-white"
-            >
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national1";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national1</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national2";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national2</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national3";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national3</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national4";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national4</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national5";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national5</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national6";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national6</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national7";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national7</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national8";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national8</a
-                    >
-                </li>
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_national9";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_national9</a
-                    >
-                </li>
-            </ul>
-        </div>
-        <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost rounded-none">
-                RC
-            </div>
-            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <!-- svelte-ignore a11y-missing-attribute -->
-
-            <ul
-                tabindex="0"
-                class="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4"
-            >
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_rc2";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_rc2</a
-                    >
-                </li>
-
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_rc3";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_rc3</a
-                    >
-                </li>
-
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_rc4";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_rc4</a
-                    >
-                </li>
-
-                <li>
-                    <a
-                        on:click={() => {
-                            currentStilling = "dm_rally_klasse_rc5";
-                            idInput = "";
-                            nummerInput = "";
-                            forsteInput = "";
-                            andenInput = "";
-                            bilInput = "";
-                            klasseInput = "";
-                            totalInput = "";
-                        }}>dm_rally_klasse_rc5</a
-                    >
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 
 <section class="flex items-center gap-14 justify-center my-auto">
     <dialog id="my_modal_2" class="modal">
@@ -464,7 +267,7 @@
                     <div class="flex flex-col">
                         <label for="id">ID</label>
                         <input
-                            class="text-xl input input-bordered input-primary input-sm w-full max-w-xs pointer-events-none text-center py-1 uppercase"
+                            class="text-sm input input-bordered input-primary input-sm w-full max-w-xs pointer-events-none text-center py-1 uppercase"
                             type="text"
                             name="id"
                             id=""
@@ -538,14 +341,17 @@
 
                 <div class="flex flex-col gap-1">
                     <div class="flex flex-col gap-1">
-                        <button class="btn text-white w-[200px]" on:click={createData}
-                            >Indsend</button
+                        <button
+                            class="btn text-white w-[200px]"
+                            on:click={createData}>Indsend</button
                         >
-                        <button class="btn text-white w-[200px]" on:click={updateData}
-                            >Ret</button
+                        <button
+                            class="btn text-white w-[200px]"
+                            on:click={updateData}>Ret</button
                         >
-                        <button class="btn text-white w-[200px]" on:click={deleteData}
-                            >Slet</button
+                        <button
+                            class="btn text-white w-[200px]"
+                            on:click={deleteData}>Slet</button
                         >
                     </div>
                 </div>
@@ -554,7 +360,7 @@
             <div>
                 <div class="flex flex-col mt-2">
                     <h3 class="text-center">DSR 1</h3>
-    
+
                     <div class="flex flex-col">
                         <label for="total">GE</label>
                         <input
@@ -588,7 +394,7 @@
                 </div>
                 <div class="flex flex-col mt-2">
                     <h3 class="text-center">DSR 2</h3>
-    
+
                     <div class="flex flex-col">
                         <label for="total">GE</label>
                         <input
@@ -619,10 +425,6 @@
                             bind:value={ps2Input}
                         />
                     </div>
-    
-    
-    
-                    
                 </div>
                 <div class="flex flex-col mt-2">
                     <h3 class="text-center">DSR 3</h3>
@@ -766,14 +568,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </dialog>
 
     <form class="mb-12">
         <div class="records">
             <h3
-                class="text-center text-3xl uppercase text-white select-none mb-8"
+                class="text-center text-3xl uppercase text-white select-none mb-8
+                my-10"
             >
                 {currentStilling}
             </h3>
@@ -781,50 +583,118 @@
             {#if records.length > 0}
                 <table class="table">
                     <!-- head -->
-                    <thead>
-                        <tr>
-                            <th class="text-white">ID</th>
-
-                            <th class="text-white">Nummer</th>
-                            <th class="text-white">Første kører</th>
-                            <th class="text-white">Anden kører</th>
-                            <th class="text-white">Bil</th>
-                            <th class="text-white">Klasse</th>
-                            <th class="text-white">Total</th>
-                        </tr>
-                    </thead>
                     <tbody>
-                        {#each records as record, index}
-                            <tr>
-                                <th
-                                    class="cursor-pointer text-white hover:text-[#dcdbdb] uppercase"
-                                    on:click={() => {
-                                        idInput = record.id;
-                                        nummerInput = record.nummer;
-                                        forsteInput = record.forstekore;
-                                        andenInput = record.andenkore;
-                                        bilInput = record.bil;
-                                        klasseInput = record.klasse;
-                                        geInput = record.ge;
-                                        klInput = record.kl;
-                                        psInput = record.ps;
-                                        totalInput = record.total;
-                                        my_modal_2.showModal();
-                                    }}>{record.id}</th
-                                >
+                        <table>
+                            <!-- Table header -->
+                            <thead>
+                                <tr>
+                                    <th class="text-white">ID</th>
+        
+                                    <th class="text-white">Nummer</th>
+                                    <th class="text-white">Første kører</th>
+                                    <th class="text-white">Anden kører</th>
+                                    <th class="text-white">Bil</th>
+                                    <th class="text-white">Klasse</th>
+                                    <th class="text-white">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {#each paginatedRecords as record, index}
+                                    
+                                        <tr>
+                                
+                                            <th
+                                                class="cursor-pointer text-white hover:text-[#dcdbdb] uppercase"
+                                                on:click={() => {
+                                                    idInput = record.id;
+                                                    nummerInput = record.nummer;
+                                                    forsteInput = record.forstekore;
+                                                    andenInput = record.andenkore;
+                                                    bilInput = record.bil;
+                                                    klasseInput = record.klasse;
+                                                    geInput = record.ge;
+                                                    klInput = record.kl;
+                                                    psInput = record.ps;
+            
+                                                    ge2Input = record.ge2;
+                                                    kl2Input = record.kl2;
+                                                    ps2Input = record.ps2;
+            
+                                                    ge3Input = record.ge3;
+                                                    kl3Input = record.kl3;
+                                                    ps3Input = record.ps3;
+            
+                                                    ge4Input = record.ge4;
+                                                    kl4Input = record.kl4;
+                                                    ps4Input = record.ps4;
+            
+                                                    ge5Input = record.ge5;
+                                                    kl5Input = record.kl5;
+                                                    ps5Input = record.ps5;
+            
+                                                    ge6Input = record.ge6;
+                                                    kl6Input = record.kl6;
+                                                    ps6Input = record.ps6;
+            
+                                                    
+            
+                                                    my_modal_2.showModal();
+                                                }}>{record.id}</th
+                                            >
+            
+                                            <td>{record.nummer}</td>
+                                            <td>{record.forstekore}</td>
+                                            <td>{record.andenkore}</td>
+                                            <td>{record.bil}</td>
+                                            <td>{record.klasse}</td>
+                                            <td>{record.total}</td>
+                                        </tr>
+                                    
+                                {/each}
+                            </tbody>
+                        </table>
 
-                                <td>{record.nummer}</td>
-                                <td>{record.forstekore}</td>
-                                <td>{record.andenkore}</td>
-                                <td>{record.bil}</td>
-                                <td>{record.klasse}</td>
-                                <td>{record.total}</td>
-                            </tr>
-                        {/each}
+                        <div class="pagination mx-auto flex items-center gap-4 justify-center my-4">
+                            <button
+                                on:click={() => currentPage--}
+                                disabled={currentPage === 1}>
+                                <img src={arrowLeft} class="w-5 invert" alt="">
+                                </button
+                            >
+                            <span
+                                >Side <span class="text-white font-bold">{currentPage}</span> ud af <span class="text-white font-bold">{Math.ceil(
+                                    records.length / itemsPerPage,
+                                )}</span></span
+                            >
+                            <button
+                                on:click={() => currentPage++}
+                                disabled={currentPage ===
+                                    Math.ceil(records.length / itemsPerPage)}
+                                >
+                                <img src={arrowRight} class="w-5 invert" alt="">
+                                </button
+                            >
+                        </div>
+                       
                     </tbody>
                 </table>
-            {:else}{/if}
+            {/if}
         </div>
     </form>
 </section>
 
+<style lang="postcss">
+    #center {
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #center2 {
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>

@@ -6,12 +6,13 @@
     import Sidebar from "$lib/Sidebar.svelte"
     import Nyheder from "../routes/Nyheder/+page.svelte";
     import Stilling from "$lib/Stilling.svelte";
+    import Afdelinger from "./Afdelinger/+page.svelte"
 </script>
 
   
   {#if $currentUser}
   
-    <Stilling/>
+    <Afdelinger/>
   {:else}
     <Login />
   {/if}
