@@ -1,15 +1,13 @@
 <script lang="ts">
     import "../../app.css";
     import Header from "$lib/Header.svelte";
-
     import { onMount } from "svelte";
-
-    import arrowLeft from "$lib/assets/ArrowLeft.svg"
-    import arrowRight from "$lib/assets/ArrowRight.svg"
-
+    import arrowLeft from "$lib/assets/ArrowLeft.svg";
+    import arrowRight from "$lib/assets/ArrowRight.svg";
     import PocketBase from "pocketbase";
 
     const pb = new PocketBase("https://dansksuperrally-cms.pockethost.io");
+    let isEditMode = false;
 
     function logUd() {
         pb.authStore.clear();
@@ -245,15 +243,27 @@
     let currentPage = 1;
     let itemsPerPage = 12;
 
-    $: paginatedRecords = records.slice(
+    // New search functionality
+    let searchQuery = "";
+    $: filteredRecords = records.filter(
+        (record) =>
+            record.forstekore
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+            record.andenkore.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+
+    $: paginatedRecords = filteredRecords.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage,
     );
 
-    function changeItemsPerPage(newItemsPerPage:any) {
+    function changeItemsPerPage(newItemsPerPage: any) {
         itemsPerPage = newItemsPerPage;
         currentPage = 1;
     }
+
+    
 </script>
 
 <Header />
@@ -264,7 +274,7 @@
             <form on:submit={() => {}} class="flex flex-col gap-2 mx-auto">
                 <h3 class="text-2xl">Generelt</h3>
                 <div>
-                    <div class="flex flex-col">
+                    <!-- <div class="flex flex-col">
                         <label for="id">ID</label>
                         <input
                             class="text-sm input input-bordered input-primary input-sm w-full max-w-xs pointer-events-none text-center py-1 uppercase"
@@ -273,7 +283,7 @@
                             id=""
                             bind:value={idInput}
                         />
-                    </div>
+                    </div> -->
 
                     <div class="flex flex-col">
                         <label for="nummer">Nummer</label>
@@ -341,18 +351,21 @@
 
                 <div class="flex flex-col gap-1">
                     <div class="flex flex-col gap-1">
-                        <button
-                            class="btn text-white w-[200px]"
-                            on:click={createData}>Indsend</button
-                        >
-                        <button
-                            class="btn text-white w-[200px]"
-                            on:click={updateData}>Ret</button
-                        >
-                        <button
-                            class="btn text-white w-[200px]"
-                            on:click={deleteData}>Slet</button
-                        >
+                        {#if isEditMode}
+                            <button
+                                class="btn text-white w-[200px]"
+                                on:click={updateData}>Ret</button
+                            >
+                            <button
+                                class="btn text-white w-[200px]"
+                                on:click={deleteData}>Slet</button
+                            >
+                        {:else}
+                            <button
+                                class="btn text-white w-[200px]"
+                                on:click={createData}>Opret ny</button
+                            >
+                        {/if}
                     </div>
                 </div>
             </form>
@@ -573,111 +586,149 @@
 
     <form class="mb-12">
         <div class="records">
-            <h3
-                class="text-center text-3xl uppercase text-white select-none mb-8
-                my-10"
+            <p
+                on:click={() => {
+                    my_modal_2.showModal();
+                    idInput = "";
+                    nummerInput = "";
+                    forsteInput = "";
+                    andenInput = "";
+                    bilInput = "";
+                    klasseInput = "";
+
+                    geInput = "";
+                    klInput = "";
+                    psInput = "";
+
+                    ge2Input = "";
+                    kl2Input = "";
+                    ps2Input = "";
+
+                    ge3Input = "";
+                    kl3Input = "";
+                    ps3Input = "";
+
+                    ge4Input = "";
+                    kl4Input = "";
+                    ps4Input = "";
+
+                    ge5Input = "";
+                    kl5Input = "";
+                    ps5Input = "";
+
+                    ge6Input = "";
+                    kl6Input = "";
+                    ps6Input = "";
+                    isEditMode = false;
+                }}
+                class="py-2 text-xl text-white pt-10 cursor-pointer uppercase"
             >
-                {currentStilling}
-            </h3>
+                Tilføj ny
+            </p>
 
-            {#if records.length > 0}
+            <!-- New search input field -->
+            <div class="mb-4">
+                <input
+                    type="text"
+                    placeholder="Søg efter navn..."
+                    bind:value={searchQuery}
+                    class="input input-bordered input-primary w-full"
+                />
+            </div>
+
+            {#if filteredRecords.length > 0}
                 <table class="table">
-                    <!-- head -->
+                    <thead>
+                        <tr>
+                            <th class="text-white">ID</th>
+                            <th class="text-white">Nummer</th>
+                            <th class="text-white">Første kører</th>
+                            <th class="text-white">Anden kører</th>
+                            <th class="text-white">Bil</th>
+                            <th class="text-white">Klasse</th>
+                            <th class="text-white">Total</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <table>
-                            <!-- Table header -->
-                            <thead>
-                                <tr>
-                                    <th class="text-white">ID</th>
-        
-                                    <th class="text-white">Nummer</th>
-                                    <th class="text-white">Første kører</th>
-                                    <th class="text-white">Anden kører</th>
-                                    <th class="text-white">Bil</th>
-                                    <th class="text-white">Klasse</th>
-                                    <th class="text-white">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {#each paginatedRecords as record, index}
-                                    
-                                        <tr>
-                                
-                                            <th
-                                                class="cursor-pointer text-white hover:text-[#dcdbdb] uppercase"
-                                                on:click={() => {
-                                                    idInput = record.id;
-                                                    nummerInput = record.nummer;
-                                                    forsteInput = record.forstekore;
-                                                    andenInput = record.andenkore;
-                                                    bilInput = record.bil;
-                                                    klasseInput = record.klasse;
-                                                    geInput = record.ge;
-                                                    klInput = record.kl;
-                                                    psInput = record.ps;
-            
-                                                    ge2Input = record.ge2;
-                                                    kl2Input = record.kl2;
-                                                    ps2Input = record.ps2;
-            
-                                                    ge3Input = record.ge3;
-                                                    kl3Input = record.kl3;
-                                                    ps3Input = record.ps3;
-            
-                                                    ge4Input = record.ge4;
-                                                    kl4Input = record.kl4;
-                                                    ps4Input = record.ps4;
-            
-                                                    ge5Input = record.ge5;
-                                                    kl5Input = record.kl5;
-                                                    ps5Input = record.ps5;
-            
-                                                    ge6Input = record.ge6;
-                                                    kl6Input = record.kl6;
-                                                    ps6Input = record.ps6;
-            
-                                                    
-            
-                                                    my_modal_2.showModal();
-                                                }}>{record.id}</th
-                                            >
-            
-                                            <td>{record.nummer}</td>
-                                            <td>{record.forstekore}</td>
-                                            <td>{record.andenkore}</td>
-                                            <td>{record.bil}</td>
-                                            <td>{record.klasse}</td>
-                                            <td>{record.total}</td>
-                                        </tr>
-                                    
-                                {/each}
-                            </tbody>
-                        </table>
+                        {#each paginatedRecords as record, index}
+                            <tr>
+                                <th
+                                    class="cursor-pointer text-white hover:text-[#dcdbdb] uppercase"
+                                    on:click={() => {
+                                        isEditMode = true;
+                                        idInput = record.id;
+                                        nummerInput = record.nummer;
+                                        forsteInput = record.forstekore;
+                                        andenInput = record.andenkore;
+                                        bilInput = record.bil;
+                                        klasseInput = record.klasse;
+                                        geInput = record.ge;
+                                        klInput = record.kl;
+                                        psInput = record.ps;
 
-                        <div class="pagination mx-auto flex items-center gap-4 justify-center my-4">
-                            <button
-                                on:click={() => currentPage--}
-                                disabled={currentPage === 1}>
-                                <img src={arrowLeft} class="w-5 invert" alt="">
-                                </button
-                            >
-                            <span
-                                >Side <span class="text-white font-bold">{currentPage}</span> ud af <span class="text-white font-bold">{Math.ceil(
-                                    records.length / itemsPerPage,
-                                )}</span></span
-                            >
-                            <button
-                                on:click={() => currentPage++}
-                                disabled={currentPage ===
-                                    Math.ceil(records.length / itemsPerPage)}
+                                        ge2Input = record.ge2;
+                                        kl2Input = record.kl2;
+                                        ps2Input = record.ps2;
+
+                                        ge3Input = record.ge3;
+                                        kl3Input = record.kl3;
+                                        ps3Input = record.ps3;
+
+                                        ge4Input = record.ge4;
+                                        kl4Input = record.kl4;
+                                        ps4Input = record.ps4;
+
+                                        ge5Input = record.ge5;
+                                        kl5Input = record.kl5;
+                                        ps5Input = record.ps5;
+
+                                        ge6Input = record.ge6;
+                                        kl6Input = record.kl6;
+                                        ps6Input = record.ps6;
+
+                                        my_modal_2.showModal();
+                                    }}>{record.id}</th
                                 >
-                                <img src={arrowRight} class="w-5 invert" alt="">
-                                </button
-                            >
-                        </div>
-                       
+
+                                <td>{record.nummer}</td>
+                                <td>{record.forstekore}</td>
+                                <td>{record.andenkore}</td>
+                                <td>{record.bil}</td>
+                                <td>{record.klasse}</td>
+                                <td>{record.total}</td>
+                            </tr>
+                        {/each}
                     </tbody>
                 </table>
+
+                <div
+                    class="pagination mx-auto flex items-center gap-4 justify-center my-4"
+                >
+                    <button
+                        on:click={() => currentPage--}
+                        disabled={currentPage === 1}
+                    >
+                        <img src={arrowLeft} class="w-5 invert" alt="" />
+                    </button>
+                    <span
+                        >Side <span class="text-white font-bold"
+                            >{currentPage}</span
+                        >
+                        ud af
+                        <span class="text-white font-bold"
+                            >{Math.ceil(
+                                filteredRecords.length / itemsPerPage,
+                            )}</span
+                        ></span
+                    >
+                    <button
+                        on:click={() => currentPage++}
+                        disabled={currentPage ===
+                            Math.ceil(filteredRecords.length / itemsPerPage)}
+                    >
+                        <img src={arrowRight} class="w-5 invert" alt="" />
+                    </button>
+                </div>
             {/if}
         </div>
     </form>
